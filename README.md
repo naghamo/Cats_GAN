@@ -1,191 +1,70 @@
-# Cat Image Generation with GAN
+# 🐱 Cats-GAN: DCGAN for Cat Faces
 
-A Deep Convolutional Generative Adversarial Network (DCGAN) implementation for generating realistic cat images using PyTorch.
+This project implements a Deep Convolutional Generative Adversarial Network (DCGAN) using **PyTorch** to generate realistic images of cat faces. The model is trained on a dataset of 64x64 cat images.
 
-## Project Overview
+## 🧠 Model Overview
 
-This project implements a DCGAN to generate synthetic cat images from random noise. The model learns to generate high-quality 64x64 RGB cat images by training a generator network against a discriminator network in an adversarial setup.
+* **Generator**: Uses transposed convolution layers to generate 64x64 RGB cat images from a 128-dimensional latent vector.
+* **Discriminator**: A CNN that distinguishes between real cat images and those produced by the generator.
+* **Loss Function**: Binary Cross Entropy (BCE) is used for both generator and discriminator.
 
-## Features
+## 🚀 Running the Notebook on Kaggle
 
-- **DCGAN Architecture**: Implements the proven Deep Convolutional GAN architecture
-- **64x64 RGB Output**: Generates high-quality color images
-- **Kaggle Integration**: Designed to run on Kaggle with GPU acceleration
-- **AFHQ Dataset**: Uses the Animal Faces-HQ (AFHQ) lite dataset for training
-- **Proper Normalization**: Images normalized to [-1, 1] range for optimal GAN training
+### 1. **Enable GPU**
 
-## Dataset
+Go to **Settings** (⚙️ on the top-right of your Kaggle Notebook) and:
 
-The project uses the AFHQ (Animal Faces-HQ) lite dataset, which contains high-quality animal face images. The dataset should be structured as:
+* Turn **Accelerator** to **GPU**
+* Ensure **Internet** is turned off (dataset is assumed to be attached)
 
-```
-data/
-└── afhq_lite/
-    └── cat/
-        ├── image1.jpg
-        ├── image2.jpg
-        └── ...
-```
+### 2. **Attach Dataset**
 
-## Model Architecture
-
-### Generator
-- **Input**: 100-dimensional noise vector
-- **Architecture**: 5 transposed convolutional layers with batch normalization
-- **Output**: 64x64x3 RGB images
-- **Activation**: ReLU (hidden layers), Tanh (output layer)
-
-### Discriminator
-- **Input**: 64x64x3 RGB images
-- **Architecture**: 5 convolutional layers with batch normalization
-- **Output**: Single probability value (real/fake)
-- **Activation**: LeakyReLU (hidden layers), Sigmoid (output layer)
-
-## Requirements
+Attach the Kaggle dataset:
+📁 `cats-faces-64x64-for-generative-models`
+This dataset will be loaded from:
 
 ```python
-torch>=1.9.0
-torchvision>=0.10.0
-numpy
-matplotlib
+/kaggle/input/cats-faces-64x64-for-generative-models
 ```
 
-## Installation & Setup
+### 3. **Run the Notebook**
 
-1. **Clone or download** the project files
-2. **Upload to Kaggle** or set up in your preferred environment
-3. **Add the AFHQ dataset** to your Kaggle notebook or local environment
-4. **Enable GPU acceleration** (recommended for faster training)
+Run all cells in order. The training and generation process includes:
 
-## Usage
+* Loading and preprocessing the dataset
+* Visualizing real cat images
+* Defining and training DCGAN (generator + discriminator)
+* Saving and displaying generated images
 
-### Basic Setup
+## 📦 Dependencies
 
-```python
-import torch
-from torchvision import datasets, transforms
-from torch.utils.data import DataLoader
+The Kaggle environment already includes most dependencies:
 
-# Define transforms
-transform = transforms.Compose([
-    transforms.Resize(64),
-    transforms.CenterCrop(64),
-    transforms.ToTensor(),
-    transforms.Normalize([0.5], [0.5]),  # Normalize to [-1, 1]
-])
+* `torch`
+* `torchvision`
+* `matplotlib`
+* `tqdm`
 
-# Load dataset
-dataset = datasets.ImageFolder(root='data/afhq_lite', transform=transform)
-dataloader = DataLoader(dataset, batch_size=64, shuffle=True)
-```
+Just make sure to run it on **GPU** for faster training.
 
-### Model Initialization
+## 📸 Sample Output
 
-```python
-# Setup device
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-
-# Create models
-netG, netD = create_models(device)
-
-# Setup training
-criterion, optimizerD, optimizerG = setup_training(netG, netD)
-```
-
-### Training Loop
-
-The training follows the standard GAN training procedure:
-
-1. **Train Discriminator**: 
-   - Update discriminator with real images (label=1)
-   - Update discriminator with fake images (label=0)
-
-2. **Train Generator**:
-   - Generate fake images and try to fool discriminator (label=1)
-
-## Model Parameters
-
-| Parameter | Value | Description |
-|-----------|-------|-------------|
-| `nz` | 100 | Size of noise vector |
-| `ngf` | 64 | Generator feature map size |
-| `ndf` | 64 | Discriminator feature map size |
-| `lr` | 0.0002 | Learning rate |
-| `beta1` | 0.5 | Adam optimizer beta1 parameter |
-| `batch_size` | 64 | Training batch size |
-| `image_size` | 64 | Output image dimensions |
-
-## File Structure
+The model will output generated images such as:
 
 ```
-cat-gan-project/
-├── cats-gan.ipynb          # Main Jupyter notebook
-├── README.md              # This file
-└── models/
-    ├── generator.py       # Generator model definition
-    ├── discriminator.py   # Discriminator model definition
-    └── utils.py          # Helper functions
+Sample Cat Images (real)
+Sample Generated Images (fake)
 ```
 
-## Training Tips
+These will be displayed as matplotlib image grids.
 
-1. **Monitor Loss**: Both generator and discriminator losses should decrease over time
-2. **Learning Rate**: Use 0.0002 for stable training
-3. **Batch Size**: 64 works well for most setups
-4. **Epochs**: Train for 100-500 epochs depending on dataset size
-5. **Save Checkpoints**: Save model states regularly during training
+## 📝 Notes
 
-## Expected Results
+* Only the first 10,000 images from the dataset are used to reduce training time.
+* Image normalization is performed to `[-1, 1]` as required by `tanh` activation in the generator.
 
-After successful training, the generator should produce realistic cat images that:
-- Have proper cat facial features (ears, eyes, whiskers)
-- Show variety in colors and patterns
-- Maintain good image quality at 64x64 resolution
+## ✍️ Author
 
-## Troubleshooting
-
-### Common Issues
-
-1. **FileNotFoundError**: Ensure dataset path is correct
-2. **CUDA Out of Memory**: Reduce batch size or use CPU
-3. **Mode Collapse**: Try different learning rates or architectures
-4. **Poor Quality**: Increase training epochs or adjust hyperparameters
-
-### Dataset Path Issues
-
-If you encounter path errors, verify:
-- Dataset is uploaded to correct location
-- Folder structure matches expected format
-- File permissions are correct (in local environments)
-
-## Performance
-
-- **Training Time**: ~2-4 hours on GPU (depends on dataset size)
-- **Memory Usage**: ~4-8GB GPU memory
-- **Model Size**: ~50MB for both generator and discriminator
-
-## Future Improvements
-
-- [ ] Implement progressive growing for higher resolution outputs
-- [ ] Add StyleGAN features for better control
-- [ ] Implement FID score evaluation
-- [ ] Add data augmentation techniques
-- [ ] Support for different animal classes
-
-## License
-
-This project is open source and available under the MIT License.
-
-## Acknowledgments
-
-- DCGAN paper: [Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks](https://arxiv.org/abs/1511.06434)
-- AFHQ Dataset: [Stargan-v2 repository](https://github.com/clovaai/stargan-v2)
-- PyTorch team for excellent deep learning framework
-
-## Contact
-
-For questions or issues, please open an issue in the project repository or contact the development team.
+Project developed as part of a GAN learning exercise.
 
 ---
-
-**Note**: This project is designed for educational purposes and research. Results may vary depending on dataset quality and training parameters.
