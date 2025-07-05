@@ -63,8 +63,10 @@ These will be displayed as matplotlib image grids.
 * Only the first 10,000 images from the dataset are used to reduce training time.
 * Image normalization is performed to `[-1, 1]` as required by `tanh` activation in the generator.
 
-## ✍️ Author
-
+## ✍️ Authors
+Nagham Omar
+Zina Assi
+Kater Alnada Watted
 Project developed as part of a GAN learning exercise.
 
 ---
