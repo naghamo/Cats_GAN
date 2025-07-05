@@ -64,9 +64,13 @@ These will be displayed as matplotlib image grids.
 * Image normalization is performed to `[-1, 1]` as required by `tanh` activation in the generator.
 
 ## ✍️ Authors
+  
 Nagham Omar
+  
 Zina Assi
+  
 Kater Alnada Watted
+  
 Project developed as part of a GAN learning exercise.
 
 ---
