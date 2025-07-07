@@ -1,6 +1,6 @@
 # 🐱 Cats-GAN: DCGAN for Cat Faces (32x32, PyTorch)
 
-This project implements a **Deep Convolutional Generative Adversarial Network (DCGAN)** in **PyTorch** to generate realistic 32x32 images of cat faces. It is designed to run seamlessly on Kaggle, using the [cats-faces-64x64-for-generative-models](https://www.kaggle.com/datasets) dataset (downsampled to 32x32).
+This project implements a **Deep Convolutional Generative Adversarial Network (DCGAN)** in **PyTorch** to generate realistic 32x32 images of cat faces. It is designed to run seamlessly on Kaggle, using the [cats-faces-64x64-for-generative-models]([https://www.kaggle.com/datasets](https://www.kaggle.com/datasets/spandan2/cats-faces-64x64-for-generative-models)) dataset (downsampled to 32x32).
 
 ---
 
