@@ -1,76 +1,84 @@
-# 🐱 Cats-GAN: DCGAN for Cat Faces
+# 🐱 Cats-GAN: DCGAN for Cat Faces (32x32, PyTorch)
 
-This project implements a Deep Convolutional Generative Adversarial Network (DCGAN) using **PyTorch** to generate realistic images of cat faces. The model is trained on a dataset of 64x64 cat images.
+This project implements a **Deep Convolutional Generative Adversarial Network (DCGAN)** in **PyTorch** to generate realistic 32x32 images of cat faces. It is designed to run seamlessly on Kaggle, using the [cats-faces-64x64-for-generative-models](https://www.kaggle.com/datasets) dataset (downsampled to 32x32).
+
+---
 
 ## 🧠 Model Overview
 
-* **Generator**: Uses transposed convolution layers to generate 64x64 RGB cat images from a 128-dimensional latent vector.
-* **Discriminator**: A CNN that distinguishes between real cat images and those produced by the generator.
-* **Loss Function**: Binary Cross Entropy (BCE) is used for both generator and discriminator.
+- **Generator:** Converts a 128-dimensional random vector (noise) into a 32x32 RGB cat image using transposed convolutions.
+- **Discriminator:** CNN that classifies images as real (from dataset) or fake (from generator).
+- **Loss Function:** Binary Cross Entropy (BCE) for both networks.
 
-## 🚀 Running the Notebook on Kaggle
+---
 
-### 1. **Enable GPU**
+## 🚀 Quick Start (Kaggle Notebook)
 
-Go to **Settings** (⚙️ on the top-right of your Kaggle Notebook) and:
+**1. Enable GPU:**  
+Click ⚙️ **Settings** (top right) and set **Accelerator** to **GPU**.
 
-* Turn **Accelerator** to **GPU**
-* Ensure **Internet** is turned off (dataset is assumed to be attached)
+**2. Attach Dataset:**  
+Add the dataset:  
+`/kaggle/input/cats-faces-64x64-for-generative-models`
 
-### 2. **Attach Dataset**
+**3. Run the Notebook:**  
+- All code and dependencies (`torch`, `torchvision`, `matplotlib`, `tqdm`) are available by default.
+- All images are resized and center-cropped to **32x32**.
+- Only the **first 10,000 images** are used for faster training.
 
-Attach the Kaggle dataset:
-📁 `cats-faces-64x64-for-generative-models`
-This dataset will be loaded from:
+---
 
-```python
-/kaggle/input/cats-faces-64x64-for-generative-models
-```
+## 🏗️ Main Features in the Code
 
-### 3. **Run the Notebook**
+- **Image Preprocessing:**  
+  - Resize & crop images to 32x32  
+  - Normalize to `[-1, 1]` for `tanh`-activated generator
+- **Efficient DataLoader:**  
+  - Uses only the first 10,000 images via `Subset`
+- **Device Support:**  
+  - Seamless GPU/CPU switching with custom `DeviceDataLoader`
+- **Generator & Discriminator:**  
+  - Updated architectures (32x32) to match code
+  - Generator: latent vector → (4x4) → (8x8) → (16x16) → (32x32)
+  - Discriminator: (32x32) → (16x16) → (8x8) → (4x4) → real/fake score
+- **Training Loop:**  
+  - Losses, scores, and checkpoints are tracked
+  - Models auto-load from checkpoints if present
+- **Visualization:**  
+  - Functions to display real images, generated images, and loss curves
 
-Run all cells in order. The training and generation process includes:
+---
 
-* Loading and preprocessing the dataset
-* Visualizing real cat images
-* Defining and training DCGAN (generator + discriminator)
-* Saving and displaying generated images
+## 📸 Output Example
 
-## 📦 Dependencies
+### 1. **Sample Cat Images (real)**
+*Generated with `show_batch(cat_loader)`*
 
-The Kaggle environment already includes most dependencies:
+![Sample Cat Images (real)](cat_real_sample.png)
 
-* `torch`
-* `torchvision`
-* `matplotlib`
-* `tqdm`
+### 2. **Sample Generated Images (fake)**
+*Generated with `reproduce()` after training*
 
-Just make sure to run it on **GPU** for faster training.
+![Sample Generated Cat Images (fake)](reproduced_images.png)
 
-## 📸 Sample Output
-
-The model will output generated images such as:
-
-```
-Sample Cat Images (real)
-Sample Generated Images (fake)
-```
-
-These will be displayed as matplotlib image grids.
+---
 
 ## 📝 Notes
 
-* Only the first 10,000 images from the dataset are used to reduce training time.
-* Image normalization is performed to `[-1, 1]` as required by `tanh` activation in the generator.
-
-## ✍️ Authors
-  
-Nagham Omar
-  
-Zina Assi
-  
-Kater Alnada Watted
-  
-Project developed as part of a GAN learning exercise.
+- Only **10,000** images are loaded to keep training fast.
+- **All images** are normalized to `[-1, 1]` as required by `tanh`.
+- Generator/discriminator architectures are customized for **32x32** images.
+- Training progress and loss curves are displayed after every 5 epochs.
 
 ---
+
+## ✍️ Authors
+
+- Nagham Omar  
+- Zina Assi  
+- Kater Alnada Watted  
+
+
+---
+
+**Enjoy generating cat faces!** 🐾
